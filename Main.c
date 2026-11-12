@@ -49,6 +49,15 @@ do{
         break;
 
         case 2:
+         /*
+            Cadastrar Id
+            Verificar se Id existe
+            cadastrar os restos das informações
+            Criar um nó
+            Funcão insere árvore
+
+            OBS: maior da esquerda prioridade se apagar pai e tiver dois filhos
+        */
         break;
 
         case 3:
