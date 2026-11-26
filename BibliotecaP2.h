@@ -17,6 +17,93 @@ O que adicionar ao arquivo para funcionamento da árvore:
 
 - Remover
 
+Arv* remover(Arv *RAIZ, int num)
+{
+    if (RAIZ == NULL || RAIZ->raiz == NULL)
+    {
+        return RAIZ;
+    }
+
+    NoArv *aux = RAIZ->raiz;
+
+    if (aux->info == num && aux->dir == NULL && aux->esq == NULL)
+    {
+        free(aux);
+        free(RAIZ);
+        return NULL;
+    }
+
+    RAIZ->raiz = remover_aux(RAIZ->raiz, num);
+
+    return RAIZ;
+}
+
+NoArv* remover_aux(NoArv *pai, int num)
+{
+    if (pai == NULL)
+    {
+        printf("\nNao encontrado na arvore");
+    }
+    else
+    {
+        if (num > pai->info)
+        {
+            pai->dir = remover_aux(pai->dir, num);
+        }
+        else if (num < pai->info)
+        {
+            pai->esq = remover_aux(pai->esq, num);
+        }
+        else
+        {
+            // Encontrou o nó
+
+            if (pai->dir == NULL && pai->esq == NULL)
+            {
+                // CASO 1: nó folha
+
+                free(pai);
+                pai = NULL;
+            }
+            else if (pai->esq == NULL)
+            {
+                // CASO 2: somente filho direito
+
+                NoArv *aux = pai;
+                pai = pai->dir;
+                free(aux);
+            }
+            else if (pai->dir == NULL)
+            {
+                // CASO 2: somente filho esquerdo
+
+                NoArv *aux = pai;
+                pai = pai->esq;
+                free(aux);
+            }
+            else
+            {
+                // CASO 3: dois filhos
+
+                NoArv *aux = pai->esq;
+
+                while (aux->dir != NULL)
+                {
+                    aux = aux->dir;
+                }
+
+                pai->info = aux->info;
+
+                aux->info = num;
+
+                pai->esq = remover_aux(pai->esq, num);
+            }
+        }
+    }
+
+    return pai;
+}
+
 
 Funcionamento do HASH
 
