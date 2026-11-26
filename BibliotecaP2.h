@@ -1,19 +1,26 @@
 #ifndef BIBLIOTECAP2_H_INCLUDED
 #define BIBLIOTECAP2_H_INCLUDED
 
+#define M 37
+
 
 /*
 
-O que adicionar ao arquivo para funcionamento da árvore:
+O que adicionar ao arquivo para funcionamento da Ã¡rvore:
 
 - Inserir
 - Verificar se existe elemento( busca )
 - Criar
-- Verificar se está vaiza
+- Verificar se estÃ¡ vaiza
 - Imprimir
 - Liberar
+
 - Remover
 
+
+Funcionamento do HASH
+
+- InserÃ§Ã£o
 
 
 */
@@ -36,13 +43,71 @@ typedef struct arvore
 
 }Arv;
 
+typedef struct guarda_incidente
+{
+    int Incidente;
 
-NoArv* aux_insere(NoArv *no, int num)
+    struct guarda_incidente *prox;
+
+} guarda;
+
+typedef struct No_Hash
+{
+    int Id;
+    char Nome_equipamento[11];
+    struct No_Hash *prox;
+
+    guarda *inc;
+
+}NoH;
+
+
+
+insercaoHash(NoH* Vetor, int Id, char Nome_equi){
+
+    NoH* aux = (*NoH)malloc(sizeof(NoH));
+    aux->Id = Id;
+    strcpy(aux->Nome_equipamento, Nome_equi);
+
+
+}
+
+
+
+
+
+Arv* Criar_arvore(){
+
+    Arv *aux;
+
+    aux = (Arv*)malloc(sizeof(Arv));
+    aux->raiz = NULL;
+
+    return aux;
+
+}
+
+
+int ver_vazia(Arv *base){
+
+    if(base->raiz == NULL)
+    {
+        return 1;
+    }
+
+    return 0;
+
+}
+
+
+NoArv* aux_insere(NoArv *no, int cod_equipamento, int id, char nome_equi)
 {
     int flag;
     NoArv *Pai;
     NoArv *novo = (NoArv*)malloc(sizeof(NoArv));
-    novo->info = num;
+    novo->id = id;
+    novo->codigoEquipamento = cod_equipamento;
+    strcpy()
     novo->esq = NULL;
     novo->dir = NULL;
 
@@ -84,8 +149,8 @@ NoArv* aux_insere(NoArv *no, int num)
                 else
                 {
                     flag = 1;
-                    free(novo); // se chegou aqui, significa que o num é igual a outro valor da árvore
-                }               // portanto não será adicionado!
+                    free(novo); // se chegou aqui, significa que o num Ã© igual a outro valor da Ã¡rvore
+                }               // portanto nÃ£o serÃ¡ adicionado!
             }
         }
     }
@@ -93,9 +158,9 @@ NoArv* aux_insere(NoArv *no, int num)
 
 
 }
-void insere(Arv *Arvore, int num)
+void insere(Arv *Arvore, int cod_equipamento, int id, char nome_equi)
 {
-    Arvore->raiz = aux_insere(Arvore->raiz,num);
+    Arvore->raiz = aux_insere(Arvore->raiz, cod_equipamento, id, nome_equi);
 }
 /*
     Criar noArvore
