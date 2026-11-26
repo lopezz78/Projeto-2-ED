@@ -116,7 +116,7 @@ void ImprimirCrescente(NoArv *pai)
 
         ImprimirCrescente(pai->dir);
     }
-}
+}//ImprimirCrescente(Arvore->raiz);
 
 Funcionamento do HASH
 
