@@ -103,7 +103,20 @@ NoArv* remover_aux(NoArv *pai, int num)
 
     return pai;
 }
+// funcao impressao IN order esquerda->pai->direita
+void ImprimirCrescente(NoArv *pai)
+{
+    if (pai != NULL)
+    {
+        ImprimirCrescente(pai->esq);
 
+        printf("\nID do incidente: %04d", pai->Id_Incidente);
+        printf("\nCodigo do equipamento: %d", pai->codigoEquipamento);
+        printf("\nGravidade: %d\n", pai->gravidade);
+
+        ImprimirCrescente(pai->dir);
+    }
+}
 
 Funcionamento do HASH
 
