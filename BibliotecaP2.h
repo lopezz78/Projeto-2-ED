@@ -14,7 +14,7 @@ O que adicionar ao arquivo para funcionamento da árvore:
 - Verificar se está vaiza
 - Imprimir
 - Liberar
-
+*/
 - Remover
 
 Arv* remover(Arv *RAIZ, int num)
@@ -110,7 +110,7 @@ Funcionamento do HASH
 - Inserção
 
 
-*/
+
 
 
 typedef struct NoArvore
