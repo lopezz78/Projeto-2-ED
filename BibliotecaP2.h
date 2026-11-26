@@ -118,6 +118,66 @@ void ImprimirCrescente(NoArv *pai)
     }
 }//ImprimirCrescente(Arvore->raiz);
 
+//Impressao solicitacao
+void PesquisarIncidente(Arv *Arvore, int num)
+{
+    NoArv *Pai;
+    int flag;
+
+    if (Arvore == NULL || Arvore->raiz == NULL)
+    {
+        printf("\nArvore vazia!");
+        return;
+    }
+
+    Pai = Arvore->raiz;
+    flag = 0;
+
+    while (flag == 0)
+    {
+        if (num > Pai->Id_Incidente)
+        {
+            if (Pai->dir == NULL)
+            {
+                flag = 2;
+            }
+            else
+            {
+                Pai = Pai->dir;
+            }
+        }
+        else
+        {
+            if (num < Pai->Id_Incidente)
+            {
+                if (Pai->esq == NULL)
+                {
+                    flag = 2;
+                }
+                else
+                {
+                    Pai = Pai->esq;
+                }
+            }
+            else
+            {
+                flag = 1;
+            }
+        }
+    }
+
+    if (flag == 1)
+    {
+        printf("\nIncidente encontrado!");
+        printf("\nID: %04d", Pai->Id_Incidente);
+        printf("\nCodigo do equipamento: %d", Pai->codigoEquipamento);
+        printf("\nGravidade: %d", Pai->gravidade);
+    }
+    else
+    {
+        printf("\nIncidente nao encontrado!");
+    }
+}
 Funcionamento do HASH
 
 - Inserção
