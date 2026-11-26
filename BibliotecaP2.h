@@ -383,6 +383,59 @@ void PesquisarIncidente(Arv *Arvore, int Id_Incidente)
         printf("\nIncidente nao encontrado!");
     }
 }
+NoArv* aux_insere_arvore(NoArv *no, int cod_equipamento, int id_inc, char nome_equi)
+{
+    int flag;
+    NoArv *Pai;
+    NoArv *novo = (NoArv*)malloc(sizeof(NoArv));
+    novo->Id_Incidente = id_inc;
+    strcpy(novo->codigoEquipamento, cod_equipamento);
+    novo->esq = NULL;
+    novo->dir = NULL;
+
+    if(no == NULL)
+    {
+        return novo;
+    }
+
+        Pai = no;
+        flag = 0;
+        while (flag==0)
+        {
+            if(Pai->Id_Incidente < id_inc)
+            {
+                if(Pai->dir == NULL)
+                {
+                    Pai->dir = novo;
+                    flag = 1;
+                }
+                else
+                {
+                    Pai = Pai->dir;
+                }
+            }
+            else{
+                if(Pai->id > id_inc)
+                {
+                    if(Pai->esq == NULL)
+                    {
+                        Pai->esq = novo;
+                        flag = 1;
+                    }
+                    else
+                    {
+                        Pai = Pai->esq;
+                    }
+                }
+                else
+                {
+                    flag = 1;
+                    free(novo); // se chegou aqui, significa que o num é igual a outro valor da árvore
+                }               // portanto não será adicionado!
+            }
+        }
+
+}
 void insereArvore(Arv *Arvore, int cod_equipamento, int id_incidente, char nome_equi)
 {
     Arvore->raiz = aux_insere(Arvore->raiz, cod_equipamento, id_incidente, nome_equi);
@@ -418,6 +471,12 @@ NoH* procura_equipamento_Hash(NoH* Vetor[], int cod_equipamento){
     Criar noArvore
     Adicionar pelo Id
 */
+
+
+
+
+#endif // BIBLIOTECAP2_H_INCLUDED
+
 
 
 
