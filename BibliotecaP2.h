@@ -28,7 +28,7 @@ Funcionamento do HASH
 
 typedef struct NoArvore
 {
-    int id;
+    int Id_Incidente;
     int codigoEquipamento;
     int gravidade;
 
@@ -45,7 +45,7 @@ typedef struct arvore
 
 typedef struct guarda_incidente
 {
-    int Incidente;
+    int Id_Icidente;
 
     struct guarda_incidente *prox;
 
@@ -61,7 +61,23 @@ typedef struct No_Hash
 
 }NoH;
 
+guarda* guardaIncidente(NoH* equip,int Id_inc)
+{
+    guarda* aux = equip->guarda;
+    guarda* novo = (guarda*)malloc(sizeof(guarda));
+    novo->Id_Incidente = Id_inc;
 
+    if(aux == NULL)
+    {
+        return novo;
+    }
+    while(aux->prox != NULL)
+    {
+        aux = aux->prox;
+    }
+    aux->prox = novo;
+    return equip->guarda;
+}
 
 NoH* auxinsercaoHash(NoH* Vetor[], int Id, char Nome_equi[], int pos){
 
@@ -99,10 +115,6 @@ void insecaoHash(NoH* Vetor[], int Id, char nome[])
 
 }
 
-
-
-
-
 Arv* Criar_arvore(){
 
     Arv *aux;
@@ -132,7 +144,7 @@ NoArv* aux_insere(NoArv *no, int cod_equipamento, int id, char nome_equi)
     int flag;
     NoArv *Pai;
     NoArv *novo = (NoArv*)malloc(sizeof(NoArv));
-    novo->id = id;
+    novo->Id_incidente = id;
     novo->codigoEquipamento = cod_equipamento;
     strcpy()
     novo->esq = NULL;
