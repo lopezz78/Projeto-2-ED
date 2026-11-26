@@ -15,169 +15,7 @@ O que adicionar ao arquivo para funcionamento da árvore:
 - Imprimir
 - Liberar
 */
-- Remover
-
-Arv* remover(Arv *RAIZ, int num)
-{
-    if (RAIZ == NULL || RAIZ->raiz == NULL)
-    {
-        return RAIZ;
-    }
-
-    NoArv *aux = RAIZ->raiz;
-
-    if (aux->info == num && aux->dir == NULL && aux->esq == NULL)
-    {
-        free(aux);
-        free(RAIZ);
-        return NULL;
-    }
-
-    RAIZ->raiz = remover_aux(RAIZ->raiz, num);
-
-    return RAIZ;
-}
-
-NoArv* remover_aux(NoArv *pai, int num)
-{
-    if (pai == NULL)
-    {
-        printf("\nNao encontrado na arvore");
-    }
-    else
-    {
-        if (num > pai->info)
-        {
-            pai->dir = remover_aux(pai->dir, num);
-        }
-        else if (num < pai->info)
-        {
-            pai->esq = remover_aux(pai->esq, num);
-        }
-        else
-        {
-            // Encontrou o nó
-
-            if (pai->dir == NULL && pai->esq == NULL)
-            {
-                // CASO 1: nó folha
-
-                free(pai);
-                pai = NULL;
-            }
-            else if (pai->esq == NULL)
-            {
-                // CASO 2: somente filho direito
-
-                NoArv *aux = pai;
-                pai = pai->dir;
-                free(aux);
-            }
-            else if (pai->dir == NULL)
-            {
-                // CASO 2: somente filho esquerdo
-
-                NoArv *aux = pai;
-                pai = pai->esq;
-                free(aux);
-            }
-            else
-            {
-                // CASO 3: dois filhos
-
-                NoArv *aux = pai->esq;
-
-                while (aux->dir != NULL)
-                {
-                    aux = aux->dir;
-                }
-
-                pai->info = aux->info;
-
-                aux->info = num;
-
-                pai->esq = remover_aux(pai->esq, num);
-            }
-        }
-    }
-
-    return pai;
-}
-// funcao impressao IN order esquerda->pai->direita
-void ImprimirCrescente(NoArv *pai)
-{
-    if (pai != NULL)
-    {
-        ImprimirCrescente(pai->esq);
-
-        printf("\nID do incidente: %04d", pai->Id_Incidente);
-        printf("\nCodigo do equipamento: %d", pai->codigoEquipamento);
-        printf("\nGravidade: %d\n", pai->gravidade);
-
-        ImprimirCrescente(pai->dir);
-    }
-}//ImprimirCrescente(Arvore->raiz);
-
-//Impressao solicitacao
-void PesquisarIncidente(Arv *Arvore, int num)
-{
-    NoArv *Pai;
-    int flag;
-
-    if (Arvore == NULL || Arvore->raiz == NULL)
-    {
-        printf("\nArvore vazia!");
-        return;
-    }
-
-    Pai = Arvore->raiz;
-    flag = 0;
-
-    while (flag == 0)
-    {
-        if (num > Pai->Id_Incidente)
-        {
-            if (Pai->dir == NULL)
-            {
-                flag = 2;
-            }
-            else
-            {
-                Pai = Pai->dir;
-            }
-        }
-        else
-        {
-            if (num < Pai->Id_Incidente)
-            {
-                if (Pai->esq == NULL)
-                {
-                    flag = 2;
-                }
-                else
-                {
-                    Pai = Pai->esq;
-                }
-            }
-            else
-            {
-                flag = 1;
-            }
-        }
-    }
-
-    if (flag == 1)
-    {
-        printf("\nIncidente encontrado!");
-        printf("\nID: %04d", Pai->Id_Incidente);
-        printf("\nCodigo do equipamento: %d", Pai->codigoEquipamento);
-        printf("\nGravidade: %d", Pai->gravidade);
-    }
-    else
-    {
-        printf("\nIncidente nao encontrado!");
-    }
-}
+          
 Funcionamento do HASH
 
 - Inserção
@@ -385,6 +223,166 @@ void insere(Arv *Arvore, int cod_equipamento, int id, char nome_equi)
     Criar noArvore
     Adicionar pelo Id
 */
+Arv* remover(Arv *RAIZ, int Id_Incidente)
+{
+    if (RAIZ == NULL || RAIZ->raiz == NULL)
+    {
+        return RAIZ;
+    }
+
+    NoArv *aux = RAIZ->raiz;
+
+    if (aux->info == Id_Incidente && aux->dir == NULL && aux->esq == NULL)
+    {
+        free(aux);
+        free(RAIZ);
+        return NULL;
+    }
+
+    RAIZ->raiz = remover_aux(RAIZ->raiz, Id_Incidente);
+
+    return RAIZ;
+}
+
+NoArv* remover_aux(NoArv *pai, int Id_Incidente)
+{
+    if (pai == NULL)
+    {
+        printf("\nNao encontrado na arvore");
+    }
+    else
+    {
+        if (Id_Incidente > pai->Id_Incidente)
+        {
+            pai->dir = remover_aux(pai->dir, Id_Incidente);
+        }
+        else if (Id_Incidente < pai->Id_Incidente)
+        {
+            pai->esq = remover_aux(pai->esq, Id_Incidente);
+        }
+        else
+        {
+            // Encontrou o nó
+
+            if (pai->dir == NULL && pai->esq == NULL)
+            {
+                // CASO 1: nó folha
+
+                free(pai);
+                pai = NULL;
+            }
+            else if (pai->esq == NULL)
+            {
+                // CASO 2: somente filho direito
+
+                NoArv *aux = pai;
+                pai = pai->dir;
+                free(aux);
+            }
+            else if (pai->dir == NULL)
+            {
+                // CASO 2: somente filho esquerdo
+
+                NoArv *aux = pai;
+                pai = pai->esq;
+                free(aux);
+            }
+            else
+            {
+                // CASO 3: dois filhos
+
+                NoArv *aux = pai->esq;
+
+                while (aux->dir != NULL)
+                {
+                    aux = aux->dir;
+                }
+
+                pai->Id_Incidente = aux->Id_Incidente;
+
+                aux->Id_Incidente = Id_Incidente;
+
+                pai->esq = remover_aux(pai->esq, Id_Incidente);
+            }
+        }
+    }
+
+    return pai;
+}
+// funcao impressao IN order esquerda->pai->direita
+void ImprimirCrescente(NoArv *pai)
+{
+    if (pai != NULL)
+    {
+        ImprimirCrescente(pai->esq);
+
+        printf("\nID do incidente: %04d", pai->Id_Incidente);
+        printf("\nCodigo do equipamento: %d", pai->codigoEquipamento);
+        printf("\nGravidade: %d\n", pai->gravidade);
+
+        ImprimirCrescente(pai->dir);
+    }
+}//ImprimirCrescente(Arvore->raiz);
+
+//Impressao solicitacao
+void PesquisarIncidente(Arv *Arvore, int Id_Incidente)
+{
+    NoArv *Pai;
+    int flag;
+
+    if (Arvore == NULL || Arvore->raiz == NULL)
+    {
+        printf("\nArvore vazia!");
+        return 0;
+    }
+
+    Pai = Arvore->raiz;
+    flag = 0;
+
+    while (flag == 0)
+    {
+        if (num > Pai->Id_Incidente)
+        {
+            if (Pai->dir == NULL)
+            {
+                flag = 2;
+            }
+            else
+            {
+                Pai = Pai->dir;
+            }
+        }
+        else
+        {
+            if (num < Pai->Id_Incidente)
+            {
+                if (Pai->esq == NULL)
+                {
+                    flag = 2;
+                }
+                else
+                {
+                    Pai = Pai->esq;
+                }
+            }
+            else
+            {
+                flag = 1;
+            }
+        }
+    }
+
+    if (flag == 1)
+    {
+        printf("\nID: %04d", Pai->Id_Incidente);
+        printf("\nCodigo do equipamento: %d", Pai->codigoEquipamento);
+        printf("\nGravidade: %d", Pai->gravidade);
+    }
+    else
+    {
+        printf("\nIncidente nao encontrado!");
+    }
+}
 
 
 
