@@ -63,12 +63,39 @@ typedef struct No_Hash
 
 
 
-insercaoHash(NoH* Vetor, int Id, char Nome_equi){
+NoH* auxinsercaoHash(NoH* Vetor[], int Id, char Nome_equi[], int pos){
 
-    NoH* aux = (*NoH)malloc(sizeof(NoH));
-    aux->Id = Id;
-    strcpy(aux->Nome_equipamento, Nome_equi);
 
+    NoH* aux;
+    NoH* novo = (NoH*)malloc(sizeof(NoH));
+    novo->Id = Id;
+    strcpy(novo->Nome_equipamento, Nome_equi);
+    novo->prox = NULL;
+
+    aux = Vetor[pos];
+
+    if(aux == NULL)
+    {
+        return novo;
+    }
+    while(aux->prox != NULL)
+    {
+        aux = aux->prox;
+    }
+
+    aux->prox = novo;
+    return Vetor[pos];
+
+
+}
+
+void insecaoHash(NoH* Vetor[], int Id, char nome[])
+{
+    int pos;
+
+    pos = Id % M;
+
+    Vetor[pos] = auxinsercaoHash(Vetor, Id, nome, pos);
 
 }
 
@@ -115,8 +142,7 @@ NoArv* aux_insere(NoArv *no, int cod_equipamento, int id, char nome_equi)
     {
         return novo;
     }
-    else
-    {
+
         Pai = no;
         flag = 0;
         while (flag==0)
@@ -153,9 +179,6 @@ NoArv* aux_insere(NoArv *no, int cod_equipamento, int id, char nome_equi)
                 }               // portanto não será adicionado!
             }
         }
-    }
-
-
 
 }
 void insere(Arv *Arvore, int cod_equipamento, int id, char nome_equi)
