@@ -8,22 +8,13 @@
 
 O que adicionar ao arquivo para funcionamento da árvore:
 
-- Inserir
+- Inserir +
 - Verificar se existe elemento( busca )
 - Criar
 - Verificar se está vaiza
 - Imprimir
 - Liberar
 */
-          
-Funcionamento do HASH
-
-- Inserção
-
-
-
-
-
 typedef struct NoArvore
 {
     int Id_Incidente;
@@ -59,192 +50,7 @@ typedef struct No_Hash
 
 }NoH;
 
-guarda* guardaIncidente(guarda* equip,int Id_inc)
-{
-    guarda* aux = equip;
-    guarda* novo = (guarda*)malloc(sizeof(guarda));
-    novo->Id_Incidente = Id_inc;
-
-    if(aux == NULL)
-    {
-        return novo;
-    }
-    while(aux->prox != NULL)
-    {
-        aux = aux->prox;
-    }
-    aux->prox = novo;
-    return equip;
-}
-
-guarda* removeIncidente(guarda* apag, int Id_inc)
-{
-    guarda* aux1 = apag;
-    guarda* aux = NULL;
-
-    while((aux1 != NULL) && (aux1->Id_incidente != Id_inc))
-    {
-        aux = aux1;
-        aux1 = aux1->prox;
-    }
-    if(aux == NULL)
-    {
-        aux1=apag;
-        apag = apag->prox;
-        free(aux1);
-        return apag;
-    }
-
-    aux->prox = aux1->prox;
-    free(aux1);
-    return apag;
-
-}
-
-NoH* auxinsercaoHash(NoH* Vetor[], int Id, char Nome_equi[], int pos){
-
-
-    NoH* aux;
-    NoH* novo = (NoH*)malloc(sizeof(NoH));
-    novo->Id = Id;
-    strcpy(novo->Nome_equipamento, Nome_equi);
-    novo->prox = NULL;
-
-    aux = Vetor[pos];
-
-    if(aux == NULL)
-    {
-        return novo;
-    }
-    while(aux->prox != NULL)
-    {
-        aux = aux->prox;
-    }
-
-    aux->prox = novo;
-    return Vetor[pos];
-
-
-}
-
-void insecaoHash(NoH* Vetor[], int Id, char nome[])
-{
-    int pos;
-
-    pos = Id % M;
-
-    Vetor[pos] = auxinsercaoHash(Vetor, Id, nome, pos);
-
-}
-
-Arv* Criar_arvore(){
-
-    Arv *aux;
-
-    aux = (Arv*)malloc(sizeof(Arv));
-    aux->raiz = NULL;
-
-    return aux;
-
-}
-
-
-int ver_vazia(Arv *base){
-
-    if(base->raiz == NULL)
-    {
-        return 1;
-    }
-
-    return 0;
-
-}
-
-
-NoArv* aux_insere(NoArv *no, int cod_equipamento, int id, char nome_equi)
-{
-    int flag;
-    NoArv *Pai;
-    NoArv *novo = (NoArv*)malloc(sizeof(NoArv));
-    novo->Id_incidente = id;
-    novo->codigoEquipamento = cod_equipamento;
-    strcpy()
-    novo->esq = NULL;
-    novo->dir = NULL;
-
-    if(no == NULL)
-    {
-        return novo;
-    }
-
-        Pai = no;
-        flag = 0;
-        while (flag==0)
-        {
-            if(Pai->info < num)
-            {
-                if(Pai->dir == NULL)
-                {
-                    Pai->dir = novo;
-                    flag = 1;
-                }
-                else
-                {
-                    Pai = Pai->dir;
-                }
-            }
-            else{
-                if(Pai->info>num)
-                {
-                    if(Pai->esq == NULL)
-                    {
-                        Pai->esq = novo;
-                        flag = 1;
-                    }
-                    else
-                    {
-                        Pai = Pai->esq;
-                    }
-                }
-                else
-                {
-                    flag = 1;
-                    free(novo); // se chegou aqui, significa que o num é igual a outro valor da árvore
-                }               // portanto não será adicionado!
-            }
-        }
-
-}
-void insere(Arv *Arvore, int cod_equipamento, int id, char nome_equi)
-{
-    Arvore->raiz = aux_insere(Arvore->raiz, cod_equipamento, id, nome_equi);
-}
-/*
-    Criar noArvore
-    Adicionar pelo Id
-*/
-Arv* remover(Arv *RAIZ, int Id_Incidente)
-{
-    if (RAIZ == NULL || RAIZ->raiz == NULL)
-    {
-        return RAIZ;
-    }
-
-    NoArv *aux = RAIZ->raiz;
-
-    if (aux->info == Id_Incidente && aux->dir == NULL && aux->esq == NULL)
-    {
-        free(aux);
-        free(RAIZ);
-        return NULL;
-    }
-
-    RAIZ->raiz = remover_aux(RAIZ->raiz, Id_Incidente);
-
-    return RAIZ;
-}
-
-NoArv* remover_aux(NoArv *pai, int Id_Incidente)
+NoArv* remover_aux(NoArv *pai, int id)
 {
     if (pai == NULL)
     {
@@ -252,13 +58,13 @@ NoArv* remover_aux(NoArv *pai, int Id_Incidente)
     }
     else
     {
-        if (Id_Incidente > pai->Id_Incidente)
+        if (id > pai->Id_Incidente)
         {
-            pai->dir = remover_aux(pai->dir, Id_Incidente);
+            pai->dir = remover_aux(pai->dir, id);
         }
-        else if (Id_Incidente < pai->Id_Incidente)
+        else if (id < pai->Id_Incidente)
         {
-            pai->esq = remover_aux(pai->esq, Id_Incidente);
+            pai->esq = remover_aux(pai->esq, id);
         }
         else
         {
@@ -300,14 +106,35 @@ NoArv* remover_aux(NoArv *pai, int Id_Incidente)
 
                 pai->Id_Incidente = aux->Id_Incidente;
 
-                aux->Id_Incidente = Id_Incidente;
+                aux->Id_Incidente = id;
 
-                pai->esq = remover_aux(pai->esq, Id_Incidente);
+                pai->esq = remover_aux(pai->esq, id);
             }
         }
     }
 
     return pai;
+}
+
+Arv* remover(Arv *RAIZ, int num)
+{
+    if (RAIZ == NULL || RAIZ->raiz == NULL)
+    {
+        return RAIZ;
+    }
+
+    NoArv *aux = RAIZ->raiz;
+
+    if (aux->Id_Incidente == num && aux->dir == NULL && aux->esq == NULL)
+    {
+        free(aux);
+        free(RAIZ);
+        return NULL;
+    }
+
+    RAIZ->raiz = remover_aux(RAIZ->raiz, num);
+
+    return RAIZ;
 }
 // funcao impressao IN order esquerda->pai->direita
 void ImprimirCrescente(NoArv *pai)
@@ -325,7 +152,7 @@ void ImprimirCrescente(NoArv *pai)
 }//ImprimirCrescente(Arvore->raiz);
 
 //Impressao solicitacao
-void PesquisarIncidente(Arv *Arvore, int Id_Incidente)
+void PesquisarIncidente(Arv *Arvore, int num)
 {
     NoArv *Pai;
     int flag;
@@ -333,7 +160,6 @@ void PesquisarIncidente(Arv *Arvore, int Id_Incidente)
     if (Arvore == NULL || Arvore->raiz == NULL)
     {
         printf("\nArvore vazia!");
-        return 0;
     }
 
     Pai = Arvore->raiz;
@@ -374,6 +200,7 @@ void PesquisarIncidente(Arv *Arvore, int Id_Incidente)
 
     if (flag == 1)
     {
+        printf("\nIncidente encontrado!");
         printf("\nID: %04d", Pai->Id_Incidente);
         printf("\nCodigo do equipamento: %d", Pai->codigoEquipamento);
         printf("\nGravidade: %d", Pai->gravidade);
@@ -383,6 +210,93 @@ void PesquisarIncidente(Arv *Arvore, int Id_Incidente)
         printf("\nIncidente nao encontrado!");
     }
 }
+
+
+guarda* guardaIncidente(NoH* equip,int Id_inc)
+{
+    guarda* aux = equip->inc;
+    guarda* novo = (guarda*)malloc(sizeof(guarda));
+    novo->Id_Incidente = Id_inc;
+
+    if(aux == NULL)
+    {
+        return novo;
+    }
+    while(aux->prox != NULL)
+    {
+        aux = aux->prox;
+    }
+    aux->prox = novo;
+    return equip->guarda;
+}
+
+/*
+
+Hash:
+- inserção
+- remoção
+
+*/
+NoH* auxinsercaoHash(NoH* Vetor[], int Id, char Nome_equi[], int pos){
+
+
+    NoH* aux;
+    NoH* novo = (NoH*)malloc(sizeof(NoH));
+    novo->Id = Id;
+    strcpy(novo->Nome_equipamento, Nome_equi);
+    novo->prox = NULL;
+
+    aux = Vetor[pos];
+
+    if(aux == NULL)
+    {
+        return novo;
+    }
+    while(aux->prox != NULL)
+    {
+        aux = aux->prox;
+    }
+
+    aux->prox = novo;
+    return Vetor[pos];
+
+
+}
+
+void insercaoHash(NoH* Vetor[], int Id, char nome[])
+{
+    int pos;
+
+    pos = Id % M;
+
+    Vetor[pos] = auxinsercaoHash(Vetor, Id, nome, pos);
+
+}
+
+Arv* Criar_arvore(){
+
+    Arv *aux;
+
+    aux = (Arv*)malloc(sizeof(Arv));
+    aux->raiz = NULL;
+
+    return aux;
+
+}
+
+
+int ver_vazia(Arv *base){
+
+    if(base->raiz == NULL)
+    {
+        return 1;
+    }
+
+    return 0;
+
+}
+
+
 NoArv* aux_insere_arvore(NoArv *no, int cod_equipamento, int id_inc, char nome_equi)
 {
     int flag;
@@ -441,7 +355,7 @@ void insereArvore(Arv *Arvore, int cod_equipamento, int id_incidente, char nome_
     Arvore->raiz = aux_insere(Arvore->raiz, cod_equipamento, id_incidente, nome_equi);
 }
 
-NoH* procura_equipamento_Hash(NoH* Vetor[], int cod_equipamento){
+int procura_equipamento_Hash(NoH* Vetor[], int cod_equipamento){
 
     int pos;
 
@@ -461,22 +375,29 @@ NoH* procura_equipamento_Hash(NoH* Vetor[], int cod_equipamento){
     }
     if(aux == NULL){
 
-        return NULL;
+        return 0;
     }
 
     return aux;
+
+}
+
+void remover_incidentes(NoH* Equipamento){
+
+    while(aux->inc->prox != NULL)
+    {
+
+    }
+
+
+
+
 
 }
 /*
     Criar noArvore
     Adicionar pelo Id
 */
-
-
-
-
-#endif // BIBLIOTECAP2_H_INCLUDED
-
 
 
 
