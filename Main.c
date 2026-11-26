@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <string.h>
+#include "BibliotecaP2.h"
+#define M 37
 
 
 void limpaBuffer(void) {
@@ -18,6 +20,16 @@ int main(){
     int opcao;
 
     char resposta;
+
+
+    Arv *Arvore;
+    Arvore = Criar_arvore();
+
+    NoH* Vetor[M];
+
+
+
+
 do{
     printf("\n");
     printf("========================================================\n");
@@ -49,7 +61,7 @@ do{
         break;
 
         case 2:
-         /*
+        /*
             Cadastrar Id
             Verificar se Id existe
             cadastrar os restos das informações
