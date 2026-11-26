@@ -221,9 +221,9 @@ typedef struct No_Hash
 
 }NoH;
 
-guarda* guardaIncidente(NoH* equip,int Id_inc)
+guarda* guardaIncidente(guarda* equip,int Id_inc)
 {
-    guarda* aux = equip->guarda;
+    guarda* aux = equip;
     guarda* novo = (guarda*)malloc(sizeof(guarda));
     novo->Id_Incidente = Id_inc;
 
@@ -236,7 +236,31 @@ guarda* guardaIncidente(NoH* equip,int Id_inc)
         aux = aux->prox;
     }
     aux->prox = novo;
-    return equip->guarda;
+    return equip;
+}
+
+guarda* removeIncidente(guarda* apag, int Id_inc)
+{
+    guarda* aux1 = apag;
+    guarda* aux = NULL;
+
+    while((aux1 != NULL) && (aux1->Id_incidente != Id_inc))
+    {
+        aux = aux1;
+        aux1 = aux1->prox;
+    }
+    if(aux == NULL)
+    {
+        aux1=apag;
+        apag = apag->prox;
+        free(aux1);
+        return apag;
+    }
+
+    aux->prox = aux1->prox;
+    free(aux1);
+    return apag;
+
 }
 
 NoH* auxinsercaoHash(NoH* Vetor[], int Id, char Nome_equi[], int pos){
