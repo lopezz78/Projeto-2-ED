@@ -383,6 +383,41 @@ void PesquisarIncidente(Arv *Arvore, int Id_Incidente)
         printf("\nIncidente nao encontrado!");
     }
 }
+void insereArvore(Arv *Arvore, int cod_equipamento, int id_incidente, char nome_equi)
+{
+    Arvore->raiz = aux_insere(Arvore->raiz, cod_equipamento, id_incidente, nome_equi);
+}
+
+NoH* procura_equipamento_Hash(NoH* Vetor[], int cod_equipamento){
+
+    int pos;
+
+    pos = cod_equipamento % M;
+
+    if(Vetor[pos] == NULL){
+
+        printf("Equipamento não encontrado!");
+
+    }
+
+    NoH* aux = Vetor[pos];
+
+    while((aux->prox !=NULL)&&(aux->Id!=cod_equipamento))
+    {
+        aux = aux->prox;
+    }
+    if(aux == NULL){
+
+        return NULL;
+    }
+
+    return aux;
+
+}
+/*
+    Criar noArvore
+    Adicionar pelo Id
+*/
 
 
 
