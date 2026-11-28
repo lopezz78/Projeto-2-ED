@@ -34,7 +34,7 @@ typedef struct arvore
 
 typedef struct guarda_incidente
 {
-    int Id_Icidente;
+    int Id_Incidente;
 
     struct guarda_incidente *prox;
 
@@ -105,10 +105,10 @@ NoArv* remover_aux(NoArv *pai, int id)
                 }
 
                 pai->Id_Incidente = aux->Id_Incidente;
+                pai->codigoEquipamento = aux->codigoEquipamento;
+                pai->gravidade = aux->gravidade;
 
-                aux->Id_Incidente = id;
-
-                pai->esq = remover_aux(pai->esq, id);
+                pai->esq = remover_aux(pai->esq, aux->Id_Incidente);
             }
         }
     }
@@ -123,14 +123,6 @@ Arv* remover(Arv *RAIZ, int num)
         return RAIZ;
     }
 
-    NoArv *aux = RAIZ->raiz;
-
-    if (aux->Id_Incidente == num && aux->dir == NULL && aux->esq == NULL)
-    {
-        free(aux);
-        free(RAIZ);
-        return NULL;
-    }
 
     RAIZ->raiz = remover_aux(RAIZ->raiz, num);
 
@@ -143,7 +135,7 @@ void ImprimirCrescente(NoArv *pai)
     {
         ImprimirCrescente(pai->esq);
 
-        printf("\nID do incidente: %04d", pai->Id_Incidente);
+        printf("\nID do incidente: %d", pai->Id_Incidente);
         printf("\nCodigo do equipamento: %d", pai->codigoEquipamento);
         printf("\nGravidade: %d\n", pai->gravidade);
 
@@ -160,6 +152,7 @@ void PesquisarIncidente(Arv *Arvore, int num)
     if (Arvore == NULL || Arvore->raiz == NULL)
     {
         printf("\nArvore vazia!");
+        return;
     }
 
     Pai = Arvore->raiz;
@@ -216,7 +209,12 @@ guarda* guardaIncidente(NoH* equip,int Id_inc)
 {
     guarda* aux = equip->inc;
     guarda* novo = (guarda*)malloc(sizeof(guarda));
+    if(novo == NULL)
+    {
+        return equip->inc;
+    }
     novo->Id_Incidente = Id_inc;
+    novo->prox = NULL'
 
     if(aux == NULL)
     {
@@ -227,7 +225,7 @@ guarda* guardaIncidente(NoH* equip,int Id_inc)
         aux = aux->prox;
     }
     aux->prox = novo;
-    return equip->guarda;
+    return equip->inc;
 }
 
 /*
@@ -242,9 +240,14 @@ NoH* auxinsercaoHash(NoH* Vetor[], int Id, char Nome_equi[], int pos){
 
     NoH* aux;
     NoH* novo = (NoH*)malloc(sizeof(NoH));
+    if(novo == NULL)
+{
+    return Vetor[pos];
+}
     novo->Id = Id;
     strcpy(novo->Nome_equipamento, Nome_equi);
     novo->prox = NULL;
+    novo->inc = NULL;
 
     aux = Vetor[pos];
 
@@ -278,6 +281,10 @@ Arv* Criar_arvore(){
     Arv *aux;
 
     aux = (Arv*)malloc(sizeof(Arv));
+    if(aux == NULL)
+{
+    return NULL;
+}
     aux->raiz = NULL;
 
     return aux;
@@ -287,7 +294,7 @@ Arv* Criar_arvore(){
 
 int ver_vazia(Arv *base){
 
-    if(base->raiz == NULL)
+    if(base == NULL || base->raiz == NULL)
     {
         return 1;
     }
@@ -297,13 +304,21 @@ int ver_vazia(Arv *base){
 }
 
 
-NoArv* aux_insere_arvore(NoArv *no, int cod_equipamento, int id_inc, char nome_equi)
+NoArv* aux_insere_arvore(NoArv *no, int cod_equipamento, int id_inc, int gravidade)
 {
     int flag;
     NoArv *Pai;
     NoArv *novo = (NoArv*)malloc(sizeof(NoArv));
+
+    if(novo == NULL)
+    {
+        printf("\nErro de alocacao!");
+        return no;
+    }
+    
     novo->Id_Incidente = id_inc;
-    strcpy(novo->codigoEquipamento, cod_equipamento);
+    novo->codigoEquipamento = cod_equipamento;
+    novo->gravidade = gravidade;
     novo->esq = NULL;
     novo->dir = NULL;
 
@@ -329,7 +344,7 @@ NoArv* aux_insere_arvore(NoArv *no, int cod_equipamento, int id_inc, char nome_e
                 }
             }
             else{
-                if(Pai->id > id_inc)
+                if(Pai->Id_Incidente > id_inc)
                 {
                     if(Pai->esq == NULL)
                     {
@@ -347,15 +362,16 @@ NoArv* aux_insere_arvore(NoArv *no, int cod_equipamento, int id_inc, char nome_e
                     free(novo); // se chegou aqui, significa que o num é igual a outro valor da árvore
                 }               // portanto não será adicionado!
             }
+            return no;
         }
 
 }
-void insereArvore(Arv *Arvore, int cod_equipamento, int id_incidente, char nome_equi)
+void insereArvore(Arv *Arvore, int cod_equipamento, int id_incidente, int gravidade)
 {
-    Arvore->raiz = aux_insere(Arvore->raiz, cod_equipamento, id_incidente, nome_equi);
+    Arvore->raiz = aux_insere_arvore(Arvore->raiz, cod_equipamento, id_incidente, gravidade);
 }
 
-int procura_equipamento_Hash(NoH* Vetor[], int cod_equipamento){
+NoH* procura_equipamento_Hash(NoH* Vetor[], int cod_equipamento){
 
     int pos;
 
@@ -364,20 +380,17 @@ int procura_equipamento_Hash(NoH* Vetor[], int cod_equipamento){
     if(Vetor[pos] == NULL){
 
         printf("Equipamento não encontrado!");
+        return NULL;
 
     }
 
     NoH* aux = Vetor[pos];
 
-    while((aux->prox !=NULL)&&(aux->Id!=cod_equipamento))
+    while((aux != NULL) && (aux->Id != cod_equipamento))
     {
         aux = aux->prox;
     }
-    if(aux == NULL){
-
-        return 0;
-    }
-
+    
     return aux;
 
 }
