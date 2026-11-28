@@ -144,15 +144,14 @@ void ImprimirCrescente(NoArv *pai)
 }//ImprimirCrescente(Arvore->raiz);
 
 //Impressao solicitacao
-void PesquisarIncidente(Arv *Arvore, int num)
+No Arv* PesquisarIncidente(Arv *Arvore, int num)
 {
     NoArv *Pai;
     int flag;
 
     if (Arvore == NULL || Arvore->raiz == NULL)
     {
-        printf("\nArvore vazia!");
-        return;
+        return NULL;
     }
 
     Pai = Arvore->raiz;
@@ -193,14 +192,11 @@ void PesquisarIncidente(Arv *Arvore, int num)
 
     if (flag == 1)
     {
-        printf("\nIncidente encontrado!");
-        printf("\nID: %04d", Pai->Id_Incidente);
-        printf("\nCodigo do equipamento: %d", Pai->codigoEquipamento);
-        printf("\nGravidade: %d", Pai->gravidade);
+        return pai;
     }
     else
     {
-        printf("\nIncidente nao encontrado!");
+        return NULL;
     }
 }
 
@@ -402,10 +398,173 @@ void remover_incidentes(NoH* Equipamento){
 
     }
 
+    
+void RegistrarIncidente(Arv *Arvore, NoH *Vetor[],
+                       int cod_equipamento, int id_incidente,
+                       int gravidade)
+{
+    NoH *equip;
+    guarda *lista;
 
+    equip = procura_equipamento_Hash(Vetor, cod_equipamento);
 
+    if(equip == NULL)
+    {
+        printf("\nEquipamento nao encontrado!");
+    }
+    else if(PesquisarIncidente(Arvore, id_incidente) != NULL)
+    {
+        printf("\nIncidente ja cadastrado!");
+    }
+    else
+    {
+        insereArvore(Arvore, cod_equipamento,
+                     id_incidente, gravidade);
 
+        if(PesquisarIncidente(Arvore, id_incidente) != NULL)
+        {
+            lista = guardaIncidente(equip, id_incidente);
 
+            if(lista != NULL)
+            {
+                equip->inc = lista;
+
+                printf("\nIncidente cadastrado com sucesso!");
+            }
+            else
+            {
+                Arvore->raiz = remover_aux(Arvore->raiz, id_incidente);
+
+                printf("\nErro ao associar incidente!");
+            }
+        }
+        else
+        {
+            printf("\nErro ao inserir incidente!");
+        }
+    }
+}
+
+void ConsultarEquipamento(Arv *Arvore, NoH *Vetor[], int codigo)
+{
+    NoH *equip;
+    guarda *aux;
+    NoArv *incidente;
+
+    equip = procura_equipamento_Hash(Vetor, codigo);
+
+    if(equip == NULL)
+    {
+        printf("\nEquipamento nao encontrado!");
+    }
+    else
+    {
+        printf("\nCodigo: %d", equip->Id);
+        printf("\nNome: %s", equip->Nome_equipamento);
+
+        aux = equip->inc;
+
+        if(aux == NULL)
+        {
+            printf("\nEquipamento sem incidentes!");
+        }
+        else
+        {
+            while(aux != NULL)
+            {
+                incidente = PesquisarIncidente(Arvore, aux->Id_Incidente);
+
+                if(incidente != NULL)
+                {
+                    printf("\n\nID: %d", incidente->Id_Incidente);
+                    printf("\nGravidade: %d", incidente->gravidade);
+                }
+
+                aux = aux->prox;
+            }
+        }
+    }
+}
+void ConsultarIncidente(Arv *Arvore, NoH *Vetor[], int id)
+{
+    NoArv *incidente;
+    NoH *equip;
+
+    incidente = PesquisarIncidente(Arvore, id);
+
+    if(incidente == NULL)
+    {
+        printf("\nIncidente nao encontrado!");
+    }
+    else
+    {
+        printf("\nID do incidente: %d", incidente->Id_Incidente);
+        printf("\nGravidade: %d", incidente->gravidade);
+
+        equip = procura_equipamento_Hash(Vetor, incidente->codigoEquipamento);
+
+        if(equip != NULL)
+        {
+            printf("\nCodigo do equipamento: %d", equip->Id);
+            printf("\nNome do equipamento: %s", equip->Nome_equipamento);
+        }
+        else
+        {
+            printf("\nEquipamento nao encontrado!");
+        }
+    }
+}
+//Usa a ordem Pos order pra liberar
+void aux_libera_arvore(NoArv *Pai)
+{
+    if(Pai != NULL)
+    {
+        aux_libera_arvore(Pai->dir);
+        aux_libera_arvore(Pai->esq);
+
+        free(Pai);
+    }
+}
+Arv* LiberarArvore(Arv *Arvore)
+{
+    if(Arvore != NULL)
+    {
+        aux_libera_arvore(Arvore->raiz);
+        free(Arvore);
+    }
+
+    return NULL;
+}
+void LiberarListaIncidentes(guarda *inicio)
+{
+    guarda *aux;
+
+    while(inicio != NULL)
+    {
+        aux = inicio;
+        inicio = inicio->prox;
+
+        free(aux);
+    }
+}
+void LiberarHash(NoH *Vetor[])
+{
+    int i;
+    NoH *aux;
+
+    for(i = 0; i < M; i++)
+    {
+        while(Vetor[i] != NULL)
+        {
+            aux = Vetor[i];
+
+            LiberarListaIncidentes(aux->inc);
+
+            Vetor[i] = Vetor[i]->prox;
+
+            free(aux);
+        }
+    }
 }
 /*
     Criar noArvore
